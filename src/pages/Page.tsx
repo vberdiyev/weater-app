@@ -20,7 +20,7 @@ function Page() {
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const searchRef = useRef<HTMLDivElement>(null);
 
-  useOnClickOutside(searchRef, () => setIsSearchFocused(false));
+  useOnClickOutside(searchRef as React.RefObject<HTMLElement>, () => setIsSearchFocused(false));
 
   useEffect(() => {
     if (data && data.sys) {
@@ -92,54 +92,59 @@ function Page() {
   const unitSymbol = units === 'metric' ? '°C' : '°F';
 
   return (
-    <div className={`min-h-screen transition-colors duration-1000 p-5 ${themeWrapper}`}>
-      <header className="relative max-w-xl mx-auto mb-10 z-50" ref={searchRef}>
-        <div className="flex items-center gap-3">
-          <div className={`flex items-center gap-3 px-5 py-3 rounded-2xl flex-1 border transition-all ${themeInput}`}>
-            <Search size={18} className="opacity-40" />
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              onKeyDown={handleSearch}
-              onFocus={() => setIsSearchFocused(true)}
-              placeholder="Search city..."
-              className="bg-transparent border-none outline-none w-full placeholder:text-current/30"
-            />
-          </div>
-          <Link to="/settings" className={`p-3 rounded-2xl border ${themeInput}`}>
-            <SettingsIcon size={22} className="opacity-70" />
-          </Link>
-        </div>
-
-        {isSearchFocused && recentCities.length > 0 && (
-          <div className={`absolute top-16 left-0 w-full p-6 rounded-[2rem] border ${themeCard}`}>
-            <span className="text-[10px] uppercase tracking-widest font-bold opacity-30 block mb-4">History</span>
-            <div className="flex flex-wrap gap-2">
-              {recentCities.map((cityName) => (
-                <button
-                  key={cityName}
-                  onClick={() => {
-                    setCity(cityName);
-                    setIsSearchFocused(false);
-                  }}
-                  className={`px-4 py-2 rounded-xl text-sm font-medium transition-transform active:scale-95 ${themeAccentBg} ${themeAccentText}`}
-                >
-                  {cityName}
-                </button>
-              ))}
+    <div className={`min-h-screen transition-colors duration-1000 ${themeWrapper}`}>
+      <header 
+        className="sticky top-0 z-50 px-5 pt-5 pb-2 backdrop-blur-md" 
+        ref={searchRef}
+      >
+        <div className="max-w-xl mx-auto relative">
+          <div className="flex items-center gap-3">
+            <div className={`flex items-center gap-3 px-5 py-3 rounded-2xl flex-1 border transition-all ${themeInput}`}>
+              <Search size={18} className="opacity-40" />
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={handleSearch}
+                onFocus={() => setIsSearchFocused(true)}
+                placeholder="Search city..."
+                className="bg-transparent border-none outline-none w-full placeholder:text-current/30 text-base"
+              />
             </div>
+            <Link to="/settings" className={`p-3 rounded-2xl border ${themeInput}`}>
+              <SettingsIcon size={22} className="opacity-70" />
+            </Link>
           </div>
-        )}
+
+          {isSearchFocused && recentCities.length > 0 && (
+            <div className={`absolute top-16 left-0 w-full p-6 rounded-[2rem] border ${themeCard}`}>
+              <span className="text-[10px] uppercase tracking-widest font-bold opacity-30 block mb-4">History</span>
+              <div className="flex flex-wrap gap-2">
+                {recentCities.map((cityName) => (
+                  <button
+                    key={cityName}
+                    onClick={() => {
+                      setCity(cityName);
+                      setIsSearchFocused(false);
+                    }}
+                    className={`px-4 py-2 rounded-xl text-sm font-medium transition-transform active:scale-95 ${themeAccentBg} ${themeAccentText}`}
+                  >
+                    {cityName}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
       </header>
 
-      <main className="max-w-xl mx-auto">
+      <main className="max-w-xl mx-auto p-5 pt-2">
         <div className="flex items-center justify-between mb-8 px-1">
-          <div className="flex items-center gap-2">
-            <MapPin size={20} className={themeAccentText} />
-            <h2 className="text-2xl font-bold">{data?.name || city}</h2>
+          <div className="flex items-center gap-2 overflow-hidden">
+            <MapPin size={20} className={`flex-shrink-0 ${themeAccentText}`} />
+            <h2 className="text-2xl font-bold truncate">{data?.name || city}</h2>
           </div>
-          <button onClick={toggleTheme} className="p-2 transition-transform active:scale-90">
+          <button onClick={toggleTheme} className="p-2 transition-transform active:scale-90 flex-shrink-0">
             {isDay ? (
               <Sun size={32} className="text-orange-400 fill-orange-400/10" />
             ) : (
@@ -148,9 +153,9 @@ function Page() {
           </button>
         </div>
 
-        <div className="flex items-center justify-between mb-12">
-          <div>
-            <h1 className="text-8xl font-bold tracking-tighter">
+        <div className="flex flex-col sm:flex-row items-center justify-between mb-12 gap-8 text-center sm:text-left">
+          <div className="w-full sm:w-auto">
+            <h1 className="text-7xl sm:text-8xl font-bold tracking-tighter leading-none">
               {isLoading ? '--' : `${Math.round(data?.main?.temp || 0)}${unitSymbol}`}
             </h1>
             <p className="opacity-60 text-lg font-medium mt-2 capitalize">
@@ -158,7 +163,7 @@ function Page() {
             </p>
           </div>
 
-          <div className={`w-40 h-40 md:w-48 md:h-48 rounded-full flex flex-col items-center justify-center border transition-all duration-700 relative ${themeCircle}`}>
+          <div className={`w-40 h-40 md:w-48 md:h-48 rounded-full flex flex-col items-center justify-center border transition-all duration-700 relative flex-shrink-0 ${themeCircle}`}>
             <span className={`text-xl font-bold ${conditionStyle}`}>
               {conditionLabel}
             </span>
@@ -167,56 +172,56 @@ function Page() {
         </div>
 
         <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className={`p-6 rounded-[2.5rem] border ${themeCard}`}>
+          <div className={`p-5 sm:p-6 rounded-[2rem] sm:rounded-[2.5rem] border ${themeCard}`}>
             <div className={`w-10 h-10 rounded-2xl flex items-center justify-center mb-4 ${isDay ? 'bg-blue-500/5' : 'bg-white/5'}`}>
               <Wind className="w-5 h-5 text-blue-500" />
             </div>
             <p className="opacity-40 text-[10px] uppercase font-bold tracking-widest mb-1">Wind</p>
-            <p className="text-xl font-bold">{isLoading ? '...' : `${data?.wind?.speed} m/s`}</p>
+            <p className="text-lg sm:text-xl font-bold">{isLoading ? '...' : `${data?.wind?.speed} m/s`}</p>
           </div>
 
-          <div className={`p-6 rounded-[2.5rem] border ${themeCard}`}>
+          <div className={`p-5 sm:p-6 rounded-[2rem] sm:rounded-[2.5rem] border ${themeCard}`}>
             <div className={`w-10 h-10 rounded-2xl flex items-center justify-center mb-4 ${isDay ? 'bg-blue-500/5' : 'bg-white/5'}`}>
               <Droplet className="w-5 h-5 text-cyan-500" />
             </div>
             <p className="opacity-40 text-[10px] uppercase font-bold tracking-widest mb-1">Humidity</p>
-            <p className="text-xl font-bold">{isLoading ? '...' : `${data?.main?.humidity}%`}</p>
+            <p className="text-lg sm:text-xl font-bold">{isLoading ? '...' : `${data?.main?.humidity}%`}</p>
           </div>
 
-          <div className={`p-6 rounded-[2.5rem] border ${themeCard}`}>
+          <div className={`p-5 sm:p-6 rounded-[2rem] sm:rounded-[2.5rem] border ${themeCard}`}>
             <div className={`w-10 h-10 rounded-2xl flex items-center justify-center mb-4 ${isDay ? 'bg-blue-500/5' : 'bg-white/5'}`}>
               <Thermometer className="w-5 h-5 text-orange-400" />
             </div>
             <p className="opacity-40 text-[10px] uppercase font-bold tracking-widest mb-1">Feels like</p>
-            <p className="text-xl font-bold">{isLoading ? '...' : `${Math.round(data?.main?.feels_like || 0)}${unitSymbol}`}</p>
+            <p className="text-lg sm:text-xl font-bold">{isLoading ? '...' : `${Math.round(data?.main?.feels_like || 0)}${unitSymbol}`}</p>
           </div>
 
-          <div className={`p-6 rounded-[2.5rem] border ${themeCard}`}>
+          <div className={`p-5 sm:p-6 rounded-[2rem] sm:rounded-[2.5rem] border ${themeCard}`}>
             <div className={`w-10 h-10 rounded-2xl flex items-center justify-center mb-4 ${isDay ? 'bg-blue-500/5' : 'bg-white/5'}`}>
               <Cloud className="w-5 h-5 text-slate-400" />
             </div>
             <p className="opacity-40 text-[10px] uppercase font-bold tracking-widest mb-1">Clouds</p>
-            <p className="text-xl font-bold">{isLoading ? '...' : `${data?.clouds?.all}%`}</p>
+            <p className="text-lg sm:text-xl font-bold">{isLoading ? '...' : `${data?.clouds?.all}%`}</p>
           </div>
         </div>
 
         <div className="grid grid-cols-3 gap-3">
-          <div className={`p-4 rounded-[1.8rem] border flex flex-col items-center text-center ${themeCard}`}>
+          <div className={`p-4 rounded-[1.5rem] sm:rounded-[1.8rem] border flex flex-col items-center text-center ${themeCard}`}>
             <Gauge className="w-5 h-5 text-emerald-500 opacity-70 mb-2" />
             <p className="opacity-40 text-[8px] uppercase font-bold mb-1">Pressure</p>
-            <p className="text-sm font-bold">{data?.main?.pressure || '...'}</p>
+            <p className="text-xs sm:text-sm font-bold">{data?.main?.pressure || '...'}</p>
           </div>
           
-          <div className={`p-4 rounded-[1.8rem] border flex flex-col items-center text-center ${themeCard}`}>
+          <div className={`p-4 rounded-[1.5rem] sm:rounded-[1.8rem] border flex flex-col items-center text-center ${themeCard}`}>
             <Eye className="w-5 h-5 text-indigo-500 opacity-70 mb-2" />
             <p className="opacity-40 text-[8px] uppercase font-bold mb-1">Visibility</p>
-            <p className="text-sm font-bold">{visibilityInKm}</p>
+            <p className="text-xs sm:text-sm font-bold">{visibilityInKm}</p>
           </div>
 
-          <div className={`p-4 rounded-[1.8rem] border flex flex-col items-center text-center ${themeCard}`}>
+          <div className={`p-4 rounded-[1.5rem] sm:rounded-[1.8rem] border flex flex-col items-center text-center ${themeCard}`}>
             <Sun className="w-5 h-5 text-yellow-500 opacity-70 mb-2" />
             <p className="opacity-40 text-[8px] uppercase font-bold mb-1">UV Index</p>
-            <p className="text-sm font-bold">Low</p>
+            <p className="text-xs sm:text-sm font-bold">Low</p>
           </div>
         </div>
 

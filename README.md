@@ -1,73 +1,50 @@
-# React + TypeScript + Vite
+# Weather Experience 🌤️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![React](https://img.shields.io/badge/React-19-blue.svg)](https://react.dev/)
+[![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-v4.0-38B2AC.svg)](https://tailwindcss.com/)
+[![TypeScript](https://img.shields.io/badge/TypeScript-5.0-blue.svg)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-Currently, two official plugins are available:
+## 📋 Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+**Weather Experience** is a sophisticated, enterprise-grade weather monitoring solution engineered with a focus on high-performance frontend architecture and prioritized UI/UX design. By integrating real-time meteorological data with dynamic environmental visualization, the application provides an immersive user experience that adapts both aesthetically and functionally to the user's context.
 
-## React Compiler
+The system utilizes a modern reactive stack to ensure low-latency data synchronization, persistent user preferences, and a mathematically grounded design system.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## ✨ Key Features
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+-   **Autonomous Contextual Adaptability**: Implements an automated theme-switching engine that synchronizes the interface with the astronomical status (Day/Night) of the queried location via local sunrise and sunset vectors.
+-   **Multi-Metric Meteorological Analysis**: Beyond standard temperature reporting, the system provides detailed indices for Atmospheric Pressure, Visibility (km), Cloud Coverage, Humidity, and Wind Velocity.
+-   **Advanced State Persistence**: Utilizes **Zustand** with middleware integration to manage a persistent search history and global settings (e.g., metric vs. imperial units) across browser sessions.
+-   **Optimized Data Caching**: Employs **TanStack Query (v5)** for asynchronous state management, featuring intelligent stale-time configurations and automated background re-fetching.
+-   **Glassmorphism UI Framework**: A design-centric interface leveraging **Tailwind CSS v4**'s Oxide Engine for high-performance rendering of blurred backdrops and complex transitions.
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## 🛠️ Technical Specifications
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+| Layer | Technology | Functional Role |
+| :--- | :--- | :--- |
+| **Framework** | [React 19](https://react.dev/) | Component-based UI Library |
+| **Language** | [TypeScript](https://www.typescriptlang.org/) | Type-safe development environment |
+| **Styling** | [Tailwind CSS v4.0](https://tailwindcss.com/) | JIT Utility-first CSS engine |
+| **State Management** | [Zustand](https://docs.pmnd.rs/zustand/) | Centralized flux-pattern state |
+| **Data Fetching** | [TanStack React Query v5](https://tanstack.com/query/latest) | Server-state management & Caching |
+| **Routing** | [React Router 7](https://reactrouter.com/) | Client-side navigation & deep linking |
+| **Iconography** | [Lucide React](https://lucide.dev/) | Accessible vector graphics |
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+---
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+## 📂 Architecture & Directory Structure
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+The project adheres to a modular, domain-driven structure to ensure scalability and maintainability:
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+```text
+src/
+├── api/          # Stateless fetch definitions
+├── hooks/        # Domain-specific logic (e.g., useWeather)
+├── store/        # Persistent state containers (Theme, Weather, Settings)
+├── types/        # Global TypeScript interfaces & schemas
+├── pages/        # View-level route components
+├── components/   # Reusable UI molecules and atoms
+└── App.tsx       # Root configuration & Provider orchestration

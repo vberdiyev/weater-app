@@ -1,1 +1,18 @@
 @import "tailwindcss";
+
+@theme {
+  --color-app-bg: #0f172a;
+  --color-card: rgba(255, 255, 255, 0.05);
+  
+  --animate-subtle-float: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+.glass {
+  background: var(--color-card);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}

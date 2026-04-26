@@ -91,10 +91,14 @@ function Page() {
   const visibilityInKm = data ? (data.visibility / 1000).toFixed(1) + ' km' : '...';
   const unitSymbol = units === 'metric' ? '°C' : '°F';
 
-  return (
+return (
     <div className={`min-h-screen transition-colors duration-1000 ${themeWrapper}`}>
       <header 
-        className="sticky top-0 z-50 px-5 pt-5 pb-2 backdrop-blur-md" 
+        className={`sticky top-0 z-50 px-5 pt-5 pb-3 border-b transition-colors ${
+          isDay 
+            ? "bg-slate-100/80 border-blue-900/5" 
+            : "bg-[#05080a]/80 border-white/5"
+        }`} 
         ref={searchRef}
       >
         <div className="max-w-xl mx-auto relative">
